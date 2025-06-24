@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='img/icon.ico') }}">
+</head>
+
+<body class="grid-container">
+    <header class="encabezado">
+        <img id="logo" src="{{ url_for('static', filename='img/logo.jpeg') }}" alt="">
+        <div>
+            <h1 class="page">Rocksario</h1>
+            <h2>Cuna del Rock & Roll</h2>
+        </div>
+        <div class="redes">
+            <a href="">Facebook</a>
+            <a href="">Instagram</a>
+            <a href="">Twitter</a>
+            {% if 'usuario' in session %}
+            <a href="{{ url_for('carrito') }}" id="carrito-button" onclick="toggleCarrito()">
+                <img src="{{ url_for('static', filename='img/carrito.png') }}" alt="carrito"
+                    style="width:30px; height:30px;">
+                <span id="carrito-cuenta">0</span>
+            </a>
+            {% endif %}
+        </div>
+    </header>
+    <nav class="navbar">
+        <ul>
+            <li><a class="link" href="{{ url_for('index') }}">Inicio</a></li>
+            <li><a class="link" href="#">Artistas</a></li>
+            <li><a class="link" href="#">Galería</a></li>
+            {% if session.get('usuario') %}
+            <form action="{{ url_for('logout') }}" method="post" style="display:inline;">
+                <button type="submit" class="link">Cerrar sesión</button>
+            </form>
+            {% endif %}
+        </ul>
+    </nav>
+    <aside class="menu">
+
+    </aside>
+
+    <main class="main from-container">
+        <div id="campo-formulario">
+            {% if not session.get('usuario') %}
+
+            <h1>Formulario de Registro</h1><br>
+            <form id="formulario" action="{{ url_for('registrar')}}" method="post">
+                <fieldset class="form" id="formulario">
+
+                    <label for="user-name">Nombre de usuario:</label>
+                    <input type="text" id="user-name" name="user-name">
+                    <span class="error-text" id="user-name-error"></span>
+                    <br>
+
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="password"><br>
+                    <span class="error-text" id="error-password"></span>
+                    <br>
+
+                    <label for="password2">Repetir Contraseña</label>
+                    <input type="password" id="password2" name="password2"><br>
+                    <span class="error-text" id="error-password2"></span>
+                    <br>
+
+                    <label for="email">Correo electrónico:</label>
+                    <input type="email" id="email" name="email"><br>
+                    <span class="error-text" id="email-error"></span>
+                    <br>
+
+                    <label for="telefono">Número de contacto:</label>
+                    <input type="tel" id="telefono" name="telefono"><br>
+                    <span class="error-text" id="telefono-error"></span>
+                    <br>
+
+                    <input type="submit" value="Registrarse"><br>
+                    <input type="reset" value="Borrar">
+                </fieldset>
+            </form>
+        </div>
+        {% else %}
+        {% with mensajes = get_flashed_messages() %}
+        {% if mensajes %}
+        <ul class="mensajes-flash">
+            {% for mensaje in mensajes %}
+            <li>{{ mensaje }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        <h1>Ajustes de Cuenta</h1>
+        <form action="{{ url_for('actualizar_usuario') }}" method="post">
+            <fieldset class="form">
+
+                <label for="user-name">Nombre de usuario:</label>
+                <input type="text" id="user-name" name="user-name" required
+                    value="{{ session['usuario']['user_name'] }}">
+                <br>
+
+                <label for="password">Nueva contraseña:</label>
+                <input type="password" id="password" name="password" autocomplete="new-password">
+                <span class="error-text" id="error-password"></span>
+                <br>
+
+                <label for="password2">Repetir contraseña:</label>
+                <input type="password" id="password2" name="password2" autocomplete="new-password">
+                <span class="error-text" id="error-password2"></span>
+                <br>
+
+                <label for="email">Correo electrónico:</label>
+                <input type="email" id="email" name="email" required value="{{ session['usuario']['email'] }}">
+                <span class="error-text" id="email-error"></span>
+                <br>
+
+                <label for="telefono">Número de contacto:</label>
+                <input type="tel" id="telefono" name="telefono" required value="{{ session['usuario']['telefono'] }}">
+                <span class="error-text" id="telefono-error"></span>
+                <br>
+
+                <button type="submit">Actualizar datos</button>
+            </fieldset>
+        </form>
+
+        {% endif %}
+    </main>
+    <footer class="footer">
+        <div class="footer-logo">
+            <img src="{{ url_for('static', filename='img/logo.jpeg')}}" alt="">
+        </div>
+        <div class="info">
+            <li><a href="">Ayuda</a></li>
+            <li><a href="{{ url_for('formulario') }}">Contactanos</a></li>
+            <li><a href="">Algo mas</a></li>
+        </div>
+    </footer>
+    <script src="{{ url_for('static', filename='js/validarRegistro.js')}}"></script>
+</body>
+
+</html>

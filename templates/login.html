@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='img/icon.ico') }}">
+    <title>Iniciar Sesion</title>
+</head>
+
+<body class="grid-container">
+    <header class="encabezado">
+        <img id="logo" src="{{ url_for('static', filename='img/logo.jpeg')}}" alt="">
+        <div>
+            <h1 class="page">Rocksario</h1>
+            <h2>Cuna del Rock & Roll</h2>
+        </div>
+        <div class="redes">
+            <a href="">Facebook</a>
+            <a href="">Instagram</a>
+            <a href="">Twitter</a>
+            {% if 'usuario' in session %}
+            <a href="{{ url_for('carrito') }}" id="carrito-button" onclick="toggleCarrito()">
+                <img src="{{ url_for('static', filename='img/carrito.png') }}" alt="carrito" style="width:30px; height:30px;">
+                <span id="carrito-cuenta">0</span>
+            </a>
+            {% endif %}
+        </div>
+    </header>
+    <nav class="navbar">
+        <ul>
+            <li><a class="link" href="{{ url_for('index') }}">Inicio</a></li>
+            <li><a class="link" href="#">Artistas</a></li>
+            <li><a class="link" href="#">Galería</a></li>
+        </ul>
+    </nav>
+    <aside class="menu">
+        <h2>Eventos destacados</h2>
+        <div class="flyers-mini">
+            <div class="flyer-mini">
+                <img src="{{ url_for('static', filename='img/michael.jpeg')}}" alt="">
+            </div>
+            <div class="flyer-mini">
+                <img src="{{url_for('static', filename='img/horcas.jpeg')}}" alt="">
+            </div>
+        </div>
+    </aside>
+    <main class="main login">
+        <div class="login-container">
+            <h2>Iniciar Sesión</h2><br>
+            {% if error %}
+            <div id="alerta-error" class="alerta-error">
+                {{error}}
+            </div>
+            {% endif %}
+            <form action="{{url_for('login')}}" method="post" id="loginForm" target="_self">
+
+                <label for="username">Usuario:</label><br>
+                <input type="text" id="username" name="username" /><br>
+                <span class="error-text" id="user-error"></span>
+                <br><br>
+
+
+                <label for="password">Contraseña:</label><br>
+                <input type="password" id="password" name="password" /><br>
+                <span class="error-text" id="pass-error"></span>
+                <br><br>
+
+                <button type="submit" class="boton-comprar">Acceder</button>
+                <div class="error" id="errorMessage"></div>
+            </form>
+            <button type="button" class="boton-comprar"
+                onclick="window.location.href='{{ url_for('formulario') }}'">Registrarse</button>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-logo">
+            <img src="{{ url_for('static', filename='img/logo.jpeg')}}" alt="">
+        </div>
+        <div class="info">
+            <li><a href="">Ayuda</a></li>
+            <li><a href="{{ url_for('formulario') }}">Contactanos</a></li>
+            <li><a href="">Algo mas</a></li>
+        </div>
+    </footer>
+    <script src="{{ url_for('static', filename='js/login.js')}}"></script>
+</body>
+
+</html>

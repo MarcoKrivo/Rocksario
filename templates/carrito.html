@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='img/icon.ico') }}">
+    <title>Carrito de Compras</title>
+</head>
+
+<body class="grid-container">
+    <header class="encabezado">
+        <img id="logo" src="{{ url_for('static' , filename= 'img/logo.jpeg')}}" alt="">
+        <div>
+            <h1 class="page">Rocksario</h1>
+            <h2>Cuna del Rock & Roll</h2>
+        </div>
+        <div class="redes">
+            <a href="">Facebook</a>
+            <a href="">Instagram</a>
+            <a href="">Twitter</a>
+            {% if 'usuario' in session %}
+            <a href="{{ url_for('carrito') }}" id="carrito-button" onclick="toggleCarrito()">
+                <img src="{{ url_for('static', filename='img/carrito.png') }}" alt="carrito" style="width:30px; height:30px;">
+                <span id="carrito-cuenta">0</span>
+            </a>
+            {% endif %}
+        </div>
+    </header>
+    <nav class="navbar">
+        <ul>
+            <li><a class="link" href="{{ url_for('index') }}">Inicio</a></li>
+            <li><a class="link" href="#">Artistas</a></li>
+            <li><a class="link" href="#">Galería</a></li>
+            {% if session.get('usuario') %}
+            <form action="{{ url_for('logout') }}" method="post" style="display:inline;">
+                <button type="submit" class="link">Cerrar sesión</button>
+            </form>
+            {% endif %}
+        </ul>
+    </nav>
+    <aside class="menu">
+        <h2>Eventos destacados</h2>
+        <div class="flyers-mini">
+            <div class="flyer-mini">
+                <img src="{{url_for('static', filename='img/michael.jpeg')}}" alt="">
+            </div>
+            <div class="flyer-mini">
+                <img src="{{url_for('static', filename='img/horcas.jpeg')}}" alt="">
+            </div>
+        </div>
+    </aside>
+    <main class="carrito-main">
+        <div id="carrito-contenedor" >
+            <h3 class="carrito-titulo">Carrito de Compras</h3>
+            <ul id="mensaje-compra" class="mensajes-flash" style="display: none;"></ul>
+            <ul id="lista-carrito" class="carrito-lista"></ul>
+            <div class="carrito-titulo">
+                <p id="total-carrito-container" style="display: none;">Total: $<span id="total-carrito">0.00</span></p>
+            </div>
+                <button type="button" class="boton-comprar" onclick="comprarYredirigir()">Comprar</button>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="footer-logo">
+            <img src="{{ url_for('static', filename='img/logo.jpeg')}}" alt="">
+        </div>
+        <div class="info">
+            <li><a href="">Ayuda</a></li>
+            <li><a href="{{ url_for('formulario') }}">Contactanos</a></li>
+            <li><a href="">Algo mas</a></li>
+        </div>
+    </footer>
+    <script src="{{ url_for('static', filename='js/carrito.js')}}"></script>
+</body>
+
+</html>

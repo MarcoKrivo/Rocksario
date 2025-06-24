@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='img/icon.ico') }}">
+    <title>Rocksario</title>
+</head>
+
+<body class="grid-container">
+    <header class="encabezado">
+        <img id="logo" src="{{ url_for('static', filename='img/logo.jpeg') }}" alt="">
+        <div>
+            <h1 class="page">Rocksario</h1>
+            <h2>Cuna del Rock & Roll</h2>
+        </div>
+        <div class="redes">
+            <a href="">Facebook</a>
+            <a href="">Instagram</a>
+            <a href="">Twitter</a>
+            {% if 'usuario' in session %}
+            <a href="{{ url_for('carrito') }}" id="carrito-button" onclick="toggleCarrito()">
+                <img src="{{ url_for('static', filename='img/carrito.png') }}" alt="carrito" style="width:30px; height:30px;">
+                <span id="carrito-cuenta">0</span>
+            </a>
+            {% endif %}
+        </div>
+
+
+    </header>
+    <nav class="navbar">
+        <ul>
+            <li><a class="link" href="{{ url_for('login') }}">Iniciar Sesión</a></li>
+            <li><a class="link" href="{{ url_for('index') }}">Inicio</a></li>
+
+            {% if session.get('usuario') and session['usuario'].get('es_admi') %}
+            <li><a class="link" href="{{ url_for('admin') }}">administrador</a></li>
+            {% endif %}
+
+            {% if session.get('usuario') %}
+            <form action="{{ url_for('formulario') }}" method="post" style="display:inline;">
+                <button type="submit" class="link">Ajustes</button>
+            </form>
+            <form action="{{ url_for('logout') }}" method="post" style="display:inline;">
+                <button type="submit" class="link">Cerrar sesión</button>
+            </form>
+            {% endif %}
+
+        </ul>
+    </nav>
+    <aside class="menu">
+        <h2>Ultimas entradas disponibles</h2>
+        <div class="flyers-mini">
+            <div class="flyer-mini">
+                <img src="{{ url_for('static', filename='img/michael.jpeg') }}" alt="">
+            </div>
+            <div class="flyer-mini">
+                <img src="{{ url_for('static', filename='img/horcas.jpeg') }}" alt="">
+            </div>
+        </div>
+    </aside>
+   <main class="main">
+    <div class="textos">
+        <h1>Proximos eventos disponibles</h1>
+        <p>Consigue las entradas</p>
+    </div>
+    <div class="conciertos">
+    {% for evento in eventos %}
+    {% set imagen = evento.imagen if evento.imagen else 'img/default.jpg' %}
+    <label class="flyer" style="background-image: url('{{ url_for('static', filename=imagen) }}');">
+        <input type="checkbox" hidden>
+        <div class="overlay">
+            <h2>{{ evento.titulo }}</h2>
+            <p>{{ evento.descripcion }}</p>
+            <p>Valor de la entrada ${{ evento.precio }}</p>
+            {% if session.get('usuario') %}
+            <button class="ticket"
+                onclick='agregarCarrito({nombre: "{{ evento.titulo }}", precio: {{ evento.precio }}, imagen: "{{ url_for('static', filename=imagen) }}"})'>Comprar entrada</button>
+            {% endif %}
+        </div>
+    </label>
+{% else %}
+    <p>No hay eventos disponibles.</p>
+{% endfor %}
+
+</div>
+
+</main>
+
+    <footer class="footer">
+        <div class="footer-logo">
+            <img src="{{ url_for('static', filename='img/logo.jpeg')}}" alt="">
+        </div>
+        <div class="info">
+            <li><a href="">Ayuda</a></li>
+            <li><a href="{{ url_for('formulario') }}">Contactanos</a></li>
+            <li><a href="">Algo mas</a></li>
+        </div>
+    </footer>
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</body>
+
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='img/icon.ico') }}">
+    <title>Rocksario</title>
+</head>
+<body class="grid-container">
+    <header class="encabezado">
+        <img id="logo" src="{{ url_for('static', filename='img/logo.jpeg') }}" alt="">
+        <div>
+            <h1 class="page">Rocksario</h1>
+            <h2>Cuna del Rock & Roll</h2>
+        </div>
+        <div class="redes">
+            <a href="">Facebook</a>
+            <a href="">Instagram</a>
+            <a href="">Twitter</a>
+            {% if 'usuario' in session %}
+            <a href="{{ url_for('carrito') }}" id="carrito-button" onclick="toggleCarrito()">
+                <img src="{{ url_for('static', filename='img/carrito.png') }}" alt="carrito" style="width:30px; height:30px;">
+                <span id="carrito-cuenta">0</span>
+            </a>
+            {% endif %}
+        </div>
+    </header>
+    <nav class="navbar">
+        <ul>
+            <li><a class="link" href="{{ url_for('login') }}">Iniciar Sesión</a></li>
+            <li><a class="link" href="{{ url_for('index') }}">Inicio</a></li>
+            <li><a class="link" href="{{ url_for('admin') }}">Artistas</a></li>
+            {% if session.get('usuario') %}
+            <form action="{{ url_for('formulario') }}" method="post" style="display:inline;">
+                <button type="submit" class="link">Ajustes</button>
+            </form>
+            <form action="{{ url_for('logout') }}" method="post" style="display:inline;">
+                <button type="submit" class="link">Cerrar sesión</button>
+            </form>
+            {% endif %}
+
+        </ul>
+    </nav>
+     <aside class="menu">
+        <h2>Ultimas entradas disponibles</h2>
+        <div class="flyers-mini">
+            <div class="flyer-mini">
+                <img src="{{ url_for('static', filename='img/michael.jpeg') }}" alt="">
+            </div>
+            <div class="flyer-mini">
+                <img src="{{ url_for('static', filename='img/horcas.jpeg') }}" alt="">
+            </div>
+        </div>
+    </aside>
+    <main class="main login">
+  <div class="admin-container">
+    <h2 class="carrito-titulo">Listado de Eventos</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>Precio</th>
+          <th>Fecha</th>
+          <th>Activo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for evento in eventos %}
+        <tr>
+          <td>{{ evento.titulo }}</td>
+          <td>${{ evento.precio }}</td>
+          <td>{{ evento.fecha.strftime('%Y-%m-%d %H:%M') }}</td>
+          <td>{{ 'Sí' if evento.activo else 'No' }}</td>
+          <td>
+            <form action="{{ url_for('borrar_evento', id=evento.id) }}" method="post" style="display:inline;">
+                <button type="submit" onclick="return confirm('¿Estás seguro de que querés borrar este evento?')">Eliminar</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <form action="{{ url_for('crear_evento') }}" method="get" style="text-align:center;">
+        <button type="submit" class="boton-evento">Crear nuevo evento</button>
+    </form>
+
+  </div>
+</main>
+ <footer class="footer">
+        <div class="footer-logo">
+            <img src="{{ url_for('static', filename='img/logo.jpeg')}}" alt="">
+        </div>
+        <div class="info">
+            <li><a href="">Ayuda</a></li>
+            <li><a href="{{ url_for('formulario') }}">Contactanos</a></li>
+            <li><a href="">Algo mas</a></li>
+        </div>
+    </footer>
+</body>
+</html>
